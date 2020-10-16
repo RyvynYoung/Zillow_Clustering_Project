@@ -93,15 +93,6 @@ MVP Questions to answer:
 - Produce a model that has less logerror than baseline
 - Determine key drivers of error
 
-Audience: 
-- Zillow Data Science Team 
-
-Setting: 
-- Professional
-
-Brainstorm: 
-- 
-
 ## Acquire Stage
 DELIVERABLES: 
 - Data is collected from the Codeup cloud database with an appropriate SQL query
@@ -129,4 +120,4 @@ DELIVERABLES:
 ## Delivery Stage
 DELIVERABLES:
 - [Main_Notebook](xxxxxxx)
-
+- walk through of notebook

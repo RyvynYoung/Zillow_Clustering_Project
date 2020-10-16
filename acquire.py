@@ -53,4 +53,4 @@ def get_zillow_cluster_data(cached=False):
         df = pd.read_csv('zillow_cluster_df.csv', index_col=0)
     return df
 
-# full shape of dataframe is ()
+# full shape of dataframe is (71,789, 70)

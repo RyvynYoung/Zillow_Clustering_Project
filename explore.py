@@ -37,29 +37,7 @@ def plot_categorical_and_continuous_vars(categorical_var, continuous_var, df):
     sns.swarmplot(data=df, y=continuous_var, x=categorical_var)
     plt.show()
 
-def create_features(df):
-    df['age'] = 2017 - df.yearbuilt
 
-    # create taxrate variable
-    df['taxrate'] = df.taxamount/df.taxvaluedollarcnt
-    
-    # create acres variable
-    df['acres'] = df.lotsizesquarefeet/43560
-    
-    # dollar per square foot-structure
-    df['structure_dollar_per_sqft'] = df.structuretaxvaluedollarcnt/df.calculatedfinishedsquarefeet
-
-    # dollar per square foot-land
-    df['land_dollar_per_sqft'] = df.landtaxvaluedollarcnt/df.lotsizesquarefeet
-    
-    # ratio of beds to baths
-    df['bed_bath_ratio'] = df.bedroomcnt/df.bathroomcnt
-    
-    # 12447 is the ID for city of LA. 
-    # I confirmed through sampling and plotting, as well as looking up a few addresses.
-    df['cola'] = df['regionidcity'].apply(lambda x: 1 if x == 12447.0 else 0)
-    
-    return df
 
 def elbow_plot(cluster_vars):
     # elbow method to identify good k for us
@@ -104,4 +82,38 @@ def run_kmeans(k, cluster_vars, cluster_col_name):
                                     #                 'longitude', 
                                     #                 'age'], 
                                     # cluster_col_name = 'area_cluster')
+
+
+def get_centroids(cluster_vars, cluster_col_name):
+    centroid_col_names = ['centroid_' + i for i in cluster_vars]
+
+    centroids = pd.DataFrame(kmeans.cluster_centers_, 
+             columns=centroid_col_names).reset_index().rename(columns={'index': cluster_col_name})
+    
+    return centroids
+
+######### centroids = get_centroids(cluster_vars, cluster_col_name='size_cluster')
+
+
+def add_to_train(cluster_col_name):
+    # concatenate cluster id
+    X_train2 = pd.concat([X_train, train_clusters], axis=1)
+
+    # join on clusterid to get centroids
+    X_train2 = X_train2.merge(centroids, how='left', 
+                            on=cluster_col_name).\
+                        set_index(X_train.index)
+    
+    # concatenate cluster id
+    X_train_scaled2 = pd.concat([X_train_scaled, train_clusters], 
+                               axis=1)
+
+    # join on clusterid to get centroids
+    X_train_scaled2 = X_train_scaled2.merge(centroids, how='left', 
+                                          on=cluster_col_name).\
+                            set_index(X_train.index)
+    
+    return X_train2, X_train_scaled2
+
+####### X_train, X_train_scaled = add_to_train(cluster_col_name = 'size_cluster')
 

@@ -44,6 +44,16 @@ def data_prep(df, cols_to_remove=[], prop_required_column=.5, prop_required_row=
     df = handle_missing_values(df, prop_required_column, prop_required_row)
     return df
 
+def get_counties(df):
+    # create dummy vars of fips id
+    county_df = pd.get_dummies(df.fips)
+    # rename columns by actual county name
+    county_df.columns = ['LA', 'Orange', 'Ventura']
+    # concatenate the dataframe with the 3 county columns to the original dataframe
+    df_dummies = pd.concat([df, county_df], axis = 1)
+    # drop regionidcounty and fips columns
+    df_dummies = df_dummies.drop(columns = ['regionidcounty', 'fips'])
+    return df_dummies
 
 def get_upper_outliers(s, k):
     '''
@@ -107,32 +117,6 @@ def add_lower_outlier_columns(df, k):
 #     print(data.describe())
 
 
-#################### Prepare Zillow Regression Data ##################
-
-def wrangle_zillow(path):
-    '''This function makes all necessary changes to the dataframe for exploration and modeling'''
-    df = pd.read_csv(path)
-    # Rename columns for clarity
-    df.rename(columns={"hashottuborspa":"hottub_spa","fireplacecnt":"fireplace","garagecarcnt":"garage"}, inplace = True)
-    df.rename(columns = {'Unnamed: 0':'delete', 'id.1':'delete1'}, inplace = True)
-
-    # Replaces NaN values with 0
-    df['garage'] = df['garage'].replace(np.nan, 0)
-    df['hottub_spa'] = df['hottub_spa'].replace(np.nan, 0)
-    df['lotsizesquarefeet'] = df['lotsizesquarefeet'].replace(np.nan, 0)
-    df['poolcnt'] = df['poolcnt'].replace(np.nan, 0)
-    df['fireplace'] = df['fireplace'].replace(np.nan, 0)
-        
-    ## Convert to Category
-    df["zip"] = df["regionidzip"].astype('category')
-    df["useid"]= df["propertylandusetypeid"].astype('category')
-    df["year"]= df["yearbuilt"].astype('category')
-
-    # Add Category Codes
-    df["zip_cc"] = df["zip"].cat.codes
-    df["useid_cc"] = df["useid"].cat.codes
-    df["year_cc"] = df["year"].cat.codes
-
 
 def run():
     print("Prepare: Cleaning acquired data...")
@@ -140,15 +124,3 @@ def run():
     print("Prepare: Completed!")
 
 
-def remove_outliers():
-    '''
-    remove outliers in bed, bath, zip, square feet, acres & tax rate
-    '''
-    return df[((df.bathroomcnt <= 7) & (df.bedroomcnt <= 7) & 
-               (df.regionidzip < 100000) & 
-               (df.bathroomcnt > 0) & 
-               (df.bedroomcnt > 0) & 
-               (df.acres < 10) &
-               (df.calculatedfinishedsquarefeet < 7000) & 
-               (df.taxrate < .05)
-              )]
