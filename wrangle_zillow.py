@@ -118,6 +118,17 @@ def wrangle_zillow_cluster():
     # drop known duplicate columns and those with proportion of null values above threshold with prepare file
     df = prepare.data_prep(df, cols_to_remove=['id', 'id.1', 'pid', 'tdate'], prop_required_column=.5, prop_required_row=.5)
     
+    # add column that is county name based on fips id
+    def get_county_name(county):
+        if county == 6037:
+            return 'LA'
+        elif county == 6059:
+            return 'Orange'
+        elif county == 6111:
+            return 'Ventura'
+
+    df['county'] = df.fips.apply(get_county_name)
+
     # get county names endcoded 
     df = prepare.get_counties(df)
 
