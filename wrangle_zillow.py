@@ -187,7 +187,17 @@ def wrangle_zillow_cluster():
 
     # df is now ready to scale
     X_train_scaled, X_validate_scaled, X_test_scaled = scale_zillow(X_train, X_validate, X_test)
-
+    # drop any columns not scaled from scaled dataframes
+    cols_to_remove5 = ['bedroomcnt', 'calculatedfinishedsquarefeet', 'fullbathcnt', 'latitude',
+       'longitude', 'lotsizesquarefeet', 'roomcnt', 'unitcnt',
+       'structuretaxvaluedollarcnt', 'taxvaluedollarcnt', 'taxamount',
+       'propertylandusedesc', 'county', 'LA', 'Orange', 'Ventura', 'age',
+       'taxrate', 'structure_dollar_per_sqft', 'land_dollar_per_sqft',
+       'bed_bath_ratio']
+    X_train_scaled = prepare.remove_columns(X_train_scaled, cols_to_remove5)
+    X_validate_scaled = prepare.remove_columns(X_validate_scaled, cols_to_remove5)
+    X_test_scaled = prepare.remove_columns(X_test_scaled, cols_to_remove5)
+    print(X_train.shape, X_validate.shape, X_test.shape)
     return df, X_train, y_train, X_validate, y_validate, X_test, y_test, X_train_scaled, X_validate_scaled, X_test_scaled
 
 
