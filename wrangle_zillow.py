@@ -101,7 +101,7 @@ def scale_zillow(X_train, X_validate, X_test):
     X_test,
     scaler = sklearn.preprocessing.MinMaxScaler(),
     columns_to_scale=['bedroomcnt', 'calculatedfinishedsquarefeet', 'fullbathcnt', 'lotsizesquarefeet', 'roomcnt', 'unitcnt', 
-    'structuretaxvaluedollarcnt', 'taxvaluedollarcnt', 'taxamount', 'age', 'taxrate', 'structure_dollar_per_sqft', 
+    'structuretaxvaluedollarcnt', 'taxvaluedollarcnt', 'taxamount', 'longitude', 'latitude', 'age', 'taxrate', 'structure_dollar_per_sqft', 
     'land_dollar_per_sqft', 'bed_bath_ratio'],
     )
     return X_train_scaled, X_validate_scaled, X_test_scaled
