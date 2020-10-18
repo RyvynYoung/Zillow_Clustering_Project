@@ -11,16 +11,16 @@ Files are located in Git Repo [here](xxxx)
 User will need env.py file with access to Codeup database 
 
 ## Domain Research:
-
-**What is a single unit property?**     
-By James Chen Updated Sep 11, 2020 What Is a Housing Unit?
-
-The term housing unit refers to a single unit within a larger structure that can be used by an individual or household to eat, sleep, and live. The unit can be in any type of residence such as a house, apartment, mobile home, or may also be a single unit in a group of rooms. Essentially, a housing unit is deemed to be a separate living quarter where the occupants live and eat separately from other residents of the structure or building. They also have direct access from the building's exterior or through a common hallway.
-- https://www.investopedia.com/terms/h/housingunits.asp
-
-**What is 'fips'?**
-This code is use to identify US counties by assigning a number to each county. To look up the county corresponding to the fips number in the dataset add the leading 0 and ignore the decimal. A chart of fips codes can be found [here](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697)
-- https://en.wikipedia.org/wiki/FIPS_county_code
+- What is a single unit housing unit?
+    - https://www.investopedia.com/terms/h/housingunits.asp
+- What is fips?
+    - https://en.wikipedia.org/wiki/FIPS_county_code
+- What is the min/max tax rate by county in US?
+    - https://www.attomdata.com/news/market-trends/figuresfriday/top-10-u-s-counties-with-the-greatest-effective-tax-rates/
+- Understanding Zillow Zestimate
+    - https://www.zillow.com/zestimate/
+    - https://www.youtube.com/watch?v=rfWzMI_VwTQ
+    - https://www.kaggle.com/c/zillow-prize-1/overview
 
 
 ## Key Findings
