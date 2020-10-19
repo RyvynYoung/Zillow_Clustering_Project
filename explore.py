@@ -34,8 +34,8 @@ def plot_categorical_and_continuous_vars(categorical_var, continuous_var, df):
 
 
 def elbow_plot(X_train_scaled, cluster_vars):
-    # elbow method to identify good k for us
-    ks = range(2,20)
+    # elbow method to identify good k for us, originally used range (2,20), changed for presentation
+    ks = range(2,10)
     
     # empty list to hold inertia (sum of squares)
     sse = []
@@ -46,8 +46,8 @@ def elbow_plot(X_train_scaled, cluster_vars):
         kmeans.fit(X_train_scaled[cluster_vars])
         # inertia
         sse.append(kmeans.inertia_)
-
-    print(pd.DataFrame(dict(k=ks, sse=sse)))
+    # print out was used for determining cutoff, commented out for presentation
+    # print(pd.DataFrame(dict(k=ks, sse=sse)))
 
     # plot k with inertia
     plt.plot(ks, sse, 'bx-')

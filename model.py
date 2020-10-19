@@ -44,3 +44,45 @@ def lasso_lars(x_scaleddf, target):
     # Computer root mean squared error
     lars_rmse = sqrt(mean_squared_error(target, lars_pred))
     return lars_rmse
+
+def polynomial(X_trainsdf, target):
+    # Make a model
+    pf = PolynomialFeatures(degree=2)
+    # note: tried increasing degree to 4 but took forever to run and would probably overfit, retest if time permits
+    # Fit and Transform model
+    # to get a new set of features..which are the original features squared
+    X_train_squared = pf.fit_transform(X_trainsdf)
+    
+    # Feed new features in to linear model. 
+    lm_squared = LinearRegression(normalize=True)
+    lm_squared.fit(X_train_squared, target)
+    # Make predictions
+    lm_squared_pred = lm_squared.predict(X_train_squared)
+    # Compute root mean squared error
+    lm_squared_rmse = sqrt(mean_squared_error(target, lm_squared_pred))
+    return lm_squared_rmse
+
+
+def poly_val_test(X_train_scaled, target, X_val_test):
+    # Make a model
+    pf = PolynomialFeatures(degree=2)
+    X_train_squared = pf.fit_transform(X_train_scaled)
+    X_vt_squared = pf.transform(X_val_test)
+    # Feed new features in to linear model. 
+    lm_squared = LinearRegression(normalize=True)
+    lm_squared.fit(X_train_squared, target)
+    # Make Predictions
+    lm_pred_vt = lm_squared.predict(X_vt_squared)
+
+    # Compute root mean squared error
+    lm_rmse_vt = sqrt(mean_squared_error(target, lm_pred_vt))
+    return lm_rmse_vt
+
+def linear_reg_vt(x_scaleddf, target, X_val_test):
+    lm = LinearRegression()
+    lm.fit(x_scaleddf, target)
+
+    y_hat = lm.predict(X_val_test)
+
+    LM_MSE = sqrt(mean_squared_error(target, y_hat))
+    return LM_MSE    
