@@ -5,6 +5,15 @@ import seaborn as sns
 import scipy.stats
 import os
 from sklearn.cluster import KMeans
+import summarize
+import prepare
+
+def summary(df):
+    # print summary info then remove generated columns
+    df = summarize.df_summary(df)
+    cols_to_remove3 = ['null_count', 'pct_null', ]
+    df = prepare.remove_columns(df, cols_to_remove3)
+    return df
 
 def plot_variable_pairs(df):
     g = sns.PairGrid(df) 
@@ -62,7 +71,18 @@ def run_kmeans(X_train_scaled, X_train, cluster_vars, k, cluster_col_name):
     
     return train_clusters, kmeans
 
-####### train_clusters, kmeans = run_kmeans(X_train_scaled, X_train, k, cluster_vars, cluster_col_name
+####### train_clusters, kmeans = run_kmeans(X_train_scaled, X_train, k, cluster_vars, cluster_col_name)
+
+def kmeans_transform(X_scaled, kmeans, cluster_vars, cluster_col_name):
+    kmeans.transform(X_scaled[cluster_vars])
+    trans_clusters = \
+        pd.DataFrame(kmeans.predict(X_scaled[cluster_vars]),
+                              columns=[cluster_col_name],
+                              index=X_scaled.index)
+    
+    return trans_clusters
+
+####### trans_clusters = kmeans_transform(X_scaled, kmeans, cluster_vars, cluster_col_name)
 
 
 def get_centroids(kmeans, cluster_vars, cluster_col_name):

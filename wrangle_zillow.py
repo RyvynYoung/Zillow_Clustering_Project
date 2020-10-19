@@ -172,11 +172,6 @@ def wrangle_zillow_cluster():
     target_var = 'logerror'
     X_train, y_train, X_validate, y_validate, X_test, y_test = split(df, target_var)
         
-    # print train summary info then remove generated columns
-    df = summarize.df_summary(df)
-    cols_to_remove3 = ['null_count', 'pct_null', ]
-    df = prepare.remove_columns(df, cols_to_remove3)
-
     # remove columns not needed for explore or modeling
     cols_to_remove4 = ['parcelid', 'yearbuilt', 'landtaxvaluedollarcnt', 'regionidzip', 'rawcensustractandblock', 'bathroomcnt']
     X_train = prepare.remove_columns(X_train, cols_to_remove4)
@@ -197,7 +192,7 @@ def wrangle_zillow_cluster():
     X_train_scaled = prepare.remove_columns(X_train_scaled, cols_to_remove5)
     X_validate_scaled = prepare.remove_columns(X_validate_scaled, cols_to_remove5)
     X_test_scaled = prepare.remove_columns(X_test_scaled, cols_to_remove5)
-    print(X_train.shape, X_validate.shape, X_test.shape)
+    print(X_train_scaled.shape, X_validate_scaled.shape, X_test_scaled.shape)
     return df, X_train, y_train, X_validate, y_validate, X_test, y_test, X_train_scaled, X_validate_scaled, X_test_scaled
 
 
