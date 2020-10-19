@@ -39,9 +39,9 @@ def create_features(df):
 
 def remove_outliers(df):
     '''
-    remove outliers in tax rate
+    remove outliers in tax rate and calculated finished sqft
     '''
-    return df[((df.taxrate > .01) & (df.taxrate < .066))]
+    return df[((df.taxrate > .01) & (df.taxrate < .066) & (df.calculatedfinishedsquarefeet < 8000) & (df.lotsizesquarefeet < 3000000))]
 
 ####### Split dataframe ########
 def split(df, target_var):
@@ -193,7 +193,11 @@ def wrangle_zillow_cluster():
     X_validate_scaled = prepare.remove_columns(X_validate_scaled, cols_to_remove5)
     X_test_scaled = prepare.remove_columns(X_test_scaled, cols_to_remove5)
     print(X_train_scaled.shape, X_validate_scaled.shape, X_test_scaled.shape)
-    return df, X_train, y_train, X_validate, y_validate, X_test, y_test, X_train_scaled, X_validate_scaled, X_test_scaled
+
+    # create X_train_explore version with target added back in
+    X_train_exp = X_train.copy()
+    X_train_exp['logerror'] = y_train.logerror
+    return df, X_train, y_train, X_validate, y_validate, X_test, y_test, X_train_scaled, X_validate_scaled, X_test_scaled, X_train_exp
 
 
 

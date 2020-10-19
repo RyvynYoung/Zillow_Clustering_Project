@@ -63,26 +63,31 @@ def polynomial(X_trainsdf, target):
     return lm_squared_rmse
 
 
-def poly_val_test(X_train_scaled, target, X_val_test):
+def poly_val_test(X_train_scaled, X_validate_scaled, y_train, y_validate):
     # Make a model
     pf = PolynomialFeatures(degree=2)
     X_train_squared = pf.fit_transform(X_train_scaled)
-    X_vt_squared = pf.transform(X_val_test)
+    X_validate_squared = pf.transform(X_validate_scaled)
+    #X_test_squared = pf.transform(X_test_scaled)
     # Feed new features in to linear model. 
     lm_squared = LinearRegression(normalize=True)
-    lm_squared.fit(X_train_squared, target)
+    lm_squared.fit(X_train_squared, y_train)
+    #lm_squared.fit(X_test_squared, y_test)
     # Make Predictions
-    lm_pred_vt = lm_squared.predict(X_vt_squared)
+    lm_pred_val = lm_squared.predict(X_validate_squared)
+    #lm_pred_test = lm_squared.predict(X_test_squared)
 
     # Compute root mean squared error
-    lm_rmse_vt = sqrt(mean_squared_error(target, lm_pred_vt))
-    return lm_rmse_vt
+    lm_rmse_val = sqrt(mean_squared_error(y_validate, lm_pred_val))
+    #lm_rmse_test = sqrt(mean_squared_error(y_test, lm_pred_test))
+    return lm_rmse_val #lm_rmse_test
 
-def linear_reg_vt(x_scaleddf, target, X_val_test):
+
+def linear_reg_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
     lm = LinearRegression()
-    lm.fit(x_scaleddf, target)
+    lm.fit(X_train_scaled, y_train)
 
-    y_hat = lm.predict(X_val_test)
+    y_hat = lm.predict(X_validate_scaled)
 
-    LM_MSE = sqrt(mean_squared_error(target, y_hat))
+    LM_MSE = sqrt(mean_squared_error(y_validate, y_hat))
     return LM_MSE    
