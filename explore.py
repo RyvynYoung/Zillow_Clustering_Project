@@ -34,14 +34,26 @@ def plot_categorical_and_continuous_vars(categorical_var, continuous_var, df):
 def pearson(continuous_var1, continuous_var2):
     alpha = .05
     r, p = stats.pearsonr(continuous_var1, continuous_var2)
-    print('r=', r)
-    print('p=', p)
+    # print('r=', r)
+    # print('p=', p)
+    # if p < alpha:
+    #     print("We reject the null hypothesis")
+    # else:
+    #     print("We fail to reject the null hypothesis")
+    return r, p
+
+def chi2test(categorical_var1, categorical_var2):
+    alpha = 0.05
+    contingency_table = pd.crosstab(categorical_var1, categorical_var2)
+
+    chi2, p, degf, expected = stats.chi2_contingency(contingency_table)
+
     if p < alpha:
         print("We reject the null hypothesis")
         print(f'p     = {p:.4f}')
     else:
         print("We fail to reject the null hypothesis")
-    return r, p
+    return p
 
 def elbow_plot(X_train_scaled, cluster_vars):
     # elbow method to identify good k for us, originally used range (2,20), changed for presentation

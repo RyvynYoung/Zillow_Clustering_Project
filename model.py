@@ -16,13 +16,13 @@ from sklearn.preprocessing import PolynomialFeatures
 import explore
 
 
-def linear_reg_model(x_scaleddf, target):
+def linear_reg_train(x_scaleddf, target):
     lm = LinearRegression()
     lm.fit(x_scaleddf, target)
     y_hat = lm.predict(x_scaleddf)
 
     LM_MSE = sqrt(mean_squared_error(target, y_hat))
-    return LM_MSE
+    return lm, y_hat, LM_MSE
 
 def get_baseline(y_train):
     # determine Baseline to beat
@@ -32,7 +32,7 @@ def get_baseline(y_train):
     # calculate the MSE for these predictions, this is our baseline to beat
     baseline = sqrt(mean_squared_error(y_train, y_hat))
     print("Baseline:", baseline)
-    return baseline
+    return baseline, y_hat
 
 def lasso_lars(x_scaleddf, target):
     # Make a model
@@ -74,13 +74,16 @@ def poly_val_test(X_train_scaled, X_validate_scaled, y_train, y_validate):
     lm_squared.fit(X_train_squared, y_train)
     
     # Make Predictions
+    lm_pred_train = lm_squared.predict(X_train_squared)
     lm_pred_val = lm_squared.predict(X_validate_squared)
-    #lm_pred_test = lm_squared.predict(X_test_squared)
+
 
     # Compute root mean squared error
+    lm_rmse_train = sqrt(mean_squared_error(y_train, lm_pred_train))
     lm_rmse_val = sqrt(mean_squared_error(y_validate, lm_pred_val))
-    
-    return lm_rmse_val 
+    print('RMSE train=', lm_rmse_train)
+    print('RMSE validate=', lm_rmse_val) 
+    return lm_rmse_train, lm_rmse_val 
 
 
 def linear_reg_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
@@ -89,12 +92,12 @@ def linear_reg_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
 
     y_hat = lm.predict(X_validate_scaled)
 
-    LM_MSE = sqrt(mean_squared_error(y_validate, y_hat))
-    return LM_MSE    
+    LM_RMSE = sqrt(mean_squared_error(y_validate, y_hat))
+    return LM_RMSE, y_hat    
 
 def tweedie(X_train_scaled, y_train):
     # Make Model
-    tw = TweedieRegressor(power=0, alpha=0.1) # 0 = normal distribution
+    tw = TweedieRegressor(power=0, alpha=.001) # 0 = normal distribution
     # Fit Model
     tw.fit(X_train_scaled, y_train)
     # Make Predictions
