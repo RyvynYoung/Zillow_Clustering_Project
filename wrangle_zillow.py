@@ -41,7 +41,7 @@ def remove_outliers(df):
     '''
     remove outliers in tax rate and calculated finished sqft
     '''
-    return df[((df.taxrate > .01) & (df.taxrate < .066) & (df.calculatedfinishedsquarefeet < 8000) & (df.lotsizesquarefeet < 3000000))]
+    return df[((df.taxrate > .01) & (df.taxrate < .066) & (df.calculatedfinishedsquarefeet < 7000) & (df.lotsizesquarefeet < 2000000))]
 
 ####### Split dataframe ########
 def split(df, target_var):
@@ -49,9 +49,9 @@ def split(df, target_var):
     This splits the dataframe for train, validate, and test, and creates X and y dataframes for each
     '''
     # split df into train_validate (80%) and test (20%)
-    train_validate, test = train_test_split(df, test_size=.20, random_state = 123)
+    train_validate, test = train_test_split(df, test_size=.20, random_state = 123, stratify=df.fips)
     # split train_validate into train(70% of 80% = 56%) and validate (30% of 80% = 24%)
-    train, validate = train_test_split(train_validate, test_size=.3, random_state = 123)
+    train, validate = train_test_split(train_validate, test_size=.3, random_state = 123, stratify=train_validate.fips)
     
     # create X_train by dropping the target variable 
     X_train = train.drop(columns=[target_var])
@@ -129,8 +129,8 @@ def wrangle_zillow_cluster():
 
     df['county'] = df.fips.apply(get_county_name)
 
-    # get county names endcoded 
-    df = prepare.get_counties(df)
+    # removing these columns
+    #df = prepare.get_counties(df)
 
     # drop additional columns with nulls that are duplicate or have too many remaining nulls to use
     cols_to_remove2 = ['heatingorsystemtypeid', 'buildingqualitytypeid', 'finishedsquarefeet12', 'propertyzoningdesc', 'regionidcity', 
@@ -173,7 +173,7 @@ def wrangle_zillow_cluster():
     X_train, y_train, X_validate, y_validate, X_test, y_test = split(df, target_var)
         
     # remove columns not needed for explore or modeling
-    cols_to_remove4 = ['parcelid', 'yearbuilt', 'landtaxvaluedollarcnt', 'regionidzip', 'rawcensustractandblock', 'bathroomcnt']
+    cols_to_remove4 = ['parcelid', 'yearbuilt', 'landtaxvaluedollarcnt', 'regionidzip', 'rawcensustractandblock', 'bathroomcnt', 'regionidcounty']
     X_train = prepare.remove_columns(X_train, cols_to_remove4)
     X_validate = prepare.remove_columns(X_validate, cols_to_remove4)
     X_test = prepare.remove_columns(X_test, cols_to_remove4)
@@ -186,9 +186,9 @@ def wrangle_zillow_cluster():
     cols_to_remove5 = ['bedroomcnt', 'calculatedfinishedsquarefeet', 'fullbathcnt', 'latitude',
        'longitude', 'lotsizesquarefeet', 'roomcnt', 'unitcnt',
        'structuretaxvaluedollarcnt', 'taxvaluedollarcnt', 'taxamount',
-       'propertylandusedesc', 'county', 'LA', 'Orange', 'Ventura', 'age',
+       'propertylandusedesc', 'county', 'age',
        'taxrate', 'structure_dollar_per_sqft', 'land_dollar_per_sqft',
-       'bed_bath_ratio']
+       'bed_bath_ratio', 'fips']
     X_train_scaled = prepare.remove_columns(X_train_scaled, cols_to_remove5)
     X_validate_scaled = prepare.remove_columns(X_validate_scaled, cols_to_remove5)
     X_test_scaled = prepare.remove_columns(X_test_scaled, cols_to_remove5)
@@ -200,24 +200,3 @@ def wrangle_zillow_cluster():
     return df, X_train, y_train, X_validate, y_validate, X_test, y_test, X_train_scaled, X_validate_scaled, X_test_scaled, X_train_exp
 
 
-
-# def scale_min_max():
-#     '''
-#     This funcion scales the required columns and returns a X scaled dataframes
-#     '''
-#     # create the scaler object and fit to X_train (get the min and max from X_train for each column)
-#     scaler = MinMaxScaler(copy=True, feature_range=(0,1)).fit(X_train)
-
-#     # transform X_train values to their scaled equivalent and create df of the scaled features
-#     X_train_scaled = pd.DataFrame(scaler.transform(X_train), 
-#                                   columns=X_train.columns.values).set_index([X_train.index.values])
-    
-#     # transform X_validate values to their scaled equivalent and create df of the scaled features
-#     X_validate_scaled = pd.DataFrame(scaler.transform(X_validate),
-#                                     columns=X_validate.columns.values).set_index([X_validate.index.values])
-
-#     # transform X_test values to their scaled equivalent and create df of the scaled features   
-#     X_test_scaled = pd.DataFrame(scaler.transform(X_test), 
-#                                  columns=X_test.columns.values).set_index([X_test.index.values])
-    
-#     return X_train_scaled, X_validate_scaled, X_test_scaled

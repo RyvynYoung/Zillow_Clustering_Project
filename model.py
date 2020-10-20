@@ -24,13 +24,13 @@ def linear_reg_model(x_scaleddf, target):
     LM_MSE = sqrt(mean_squared_error(target, y_hat))
     return LM_MSE
 
-def get_baseline(y_train, target):
+def get_baseline(y_train):
     # determine Baseline to beat
     rows_needed = y_train.shape[0]
     # create array of predictions of same size as y_train.logerror based on the mean
-    y_hat = np.full(rows_needed, np.mean(target))
+    y_hat = np.full(rows_needed, np.mean(y_train))
     # calculate the MSE for these predictions, this is our baseline to beat
-    baseline = sqrt(mean_squared_error(target, y_hat))
+    baseline = sqrt(mean_squared_error(y_train, y_hat))
     print("Baseline:", baseline)
     return baseline
 
@@ -72,15 +72,15 @@ def poly_val_test(X_train_scaled, X_validate_scaled, y_train, y_validate):
     # Feed new features in to linear model. 
     lm_squared = LinearRegression(normalize=True)
     lm_squared.fit(X_train_squared, y_train)
-    #lm_squared.fit(X_test_squared, y_test)
+    
     # Make Predictions
     lm_pred_val = lm_squared.predict(X_validate_squared)
     #lm_pred_test = lm_squared.predict(X_test_squared)
 
     # Compute root mean squared error
     lm_rmse_val = sqrt(mean_squared_error(y_validate, lm_pred_val))
-    #lm_rmse_test = sqrt(mean_squared_error(y_test, lm_pred_test))
-    return lm_rmse_val #lm_rmse_test
+    
+    return lm_rmse_val 
 
 
 def linear_reg_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
@@ -91,3 +91,25 @@ def linear_reg_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
 
     LM_MSE = sqrt(mean_squared_error(y_validate, y_hat))
     return LM_MSE    
+
+def tweedie(X_train_scaled, y_train):
+    # Make Model
+    tw = TweedieRegressor(power=0, alpha=0.1) # 0 = normal distribution
+    # Fit Model
+    tw.fit(X_train_scaled, y_train)
+    # Make Predictions
+    tw_pred = tw.predict(X_train_scaled)
+    # Compute root mean squared error
+    tw_rmse = sqrt(mean_squared_error(y_train, tw_pred))
+    return tw_rmse
+
+def tweedie_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
+    # Make Model
+    tw = TweedieRegressor(power=0, alpha=0.1) # 0 = normal distribution
+    # Fit Model
+    tw.fit(X_train_scaled, y_train)
+    # Make Predictions
+    tw_pred = tw.predict(X_validate_scaled)
+    # Compute root mean squared error
+    tw_rmse = sqrt(mean_squared_error(y_validate, tw_pred))
+    return tw_rmse

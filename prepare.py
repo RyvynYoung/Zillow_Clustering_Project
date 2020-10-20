@@ -52,7 +52,7 @@ def get_counties(df):
     # concatenate the dataframe with the 3 county columns to the original dataframe
     df_dummies = pd.concat([df, county_df], axis = 1)
     # drop regionidcounty and fips columns
-    df_dummies = df_dummies.drop(columns = ['regionidcounty', 'fips'])
+    df_dummies = df_dummies.drop(columns = ['regionidcounty'])
     return df_dummies
 
 def get_upper_outliers(s, k):
