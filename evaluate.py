@@ -6,10 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from pydataset import data
-
-# Linear Model
 from statsmodels.formula.api import ols
-
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 
@@ -17,11 +14,17 @@ from math import sqrt
 
 # create model object
 def make_model_object(target, feature, df):
+    '''
+    makes a simple model object
+    '''
     model_object = ols(f'{target} ~ {feature}', df).fit()
     return model_object
 
 # create evaluation dataframe
 def make_evaldf(feature, target, model_object, df):
+    '''
+    make an evaluation dataframe
+    '''
     evaldf = pd.DataFrame()
     evaldf['feature'] = df[feature]
     evaldf['target'] = df[target]
@@ -31,8 +34,11 @@ def make_evaldf(feature, target, model_object, df):
     evaldf["model_residual"] = evaldf.yhat - evaldf.target
     return evaldf
 
-# create dataframe metrics from evaluation datafram
+# create dataframe metrics from evaluation dataframe
 def metrics(df, model_object):
+    '''
+    create metrics results from dataframe
+    '''
     baseline_sse = (df.baseline_residual**2).sum()
     model_sse = (df.model_residual**2).sum()
 
@@ -62,6 +68,9 @@ def metrics(df, model_object):
     
 # make a plot to visualize residuals
 def plot_residuals(actual, predicted):
+    '''
+    plot residuals with the actual and predicted y values
+    '''
     residuals = actual - predicted
     plt.hlines(0, actual.min(), actual.max(), ls=':')
     plt.scatter(actual, residuals)

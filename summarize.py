@@ -64,6 +64,9 @@ def get_missing_cols(df):
 
 
 def df_summary(df):
+    '''
+    This prints summary info for the dataframe. Useful for handling nulls
+    '''
     print(df.shape)
     print(df.info())
     print(df.describe())

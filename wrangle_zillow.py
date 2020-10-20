@@ -14,14 +14,14 @@ import sklearn
 
 ######## Add features ######
 def create_features(df):
+    '''
+    creates new features for exploration and possibly modeling
+    '''
     df['age'] = 2017 - df.yearbuilt
 
     # create taxrate variable
     df['taxrate'] = df.taxamount/df.taxvaluedollarcnt
-    
-    # create acres variable
-    # df['acres'] = df.lotsizesquarefeet/43560
-    
+        
     # dollar per square foot-structure
     df['structure_dollar_per_sqft'] = df.structuretaxvaluedollarcnt/df.calculatedfinishedsquarefeet
 
@@ -30,11 +30,7 @@ def create_features(df):
     
     # ratio of beds to baths
     df['bed_bath_ratio'] = df.bedroomcnt/df.bathroomcnt
-    
-    # 12447 is the ID for city of LA. 
-    # I confirmed through sampling and plotting, as well as looking up a few addresses.
-    # df['cola'] = df['regionidcity'].apply(lambda x: 1 if x == 12447.0 else 0)
-    
+
     return df
 
 def remove_outliers(df):

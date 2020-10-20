@@ -7,7 +7,7 @@
 - The presentation will consist of a notebook demo of the discoveries you made and work you have done related to uncovering what the drivers of the error in the zestimate is.
 
 ## Instructions for Replication
-Files are located in Git Repo [here](xxxx)
+Files are located in Git Repo [here](https://github.com/RyvynYoung/Zillow_Clustering_Project)
 User will need env.py file with access to Codeup database 
 
 ## Domain Research:
@@ -55,28 +55,9 @@ Zillow Culstering Project [repo](XXXXXXXX)
 ```
 
 ## Data Dictionary
-  ---                            ---
-| **Feature**                  | **Definition**                                         |
-| ---                          | ---                                                    |
-| bathroomcnt                  | # of bathrooms in home                                 |
-| bedroomcnt                   | # of bedrooms in home                                  |
-| calculatedfinishedsquarefeet | calculated square footage                              |
-| fips                         | Code to identify US counties                           |
-| latitude                     | Angular distance north or south of the earth's equator |
-| longitude                    | Geographic coordinate, east–west position on the Earth |
-| lotsizesquarefeet            | lot size in square feet                                |
-| taxamount 	                 | Amount paid in taxes in dollars                        |
-| yearbuilt                    | year of construction                                   |
-| regionidzip                  | zip code                                               |
-| propertyuseid                | property land use code                                 |
+see data_dictionary.md
 
- 
-  ---                            ---                                                    
-| **Target**                   | **Definition**                                         |
-| ---                          | ---                                                    |
-| logerror                     | Zestimate error                                        |
-***
-
+*****
 ## Planning Stage
 Project Description: 
 - Use cluster model to identify single unit property groups within the Codeup Zillow 2017 dataset
@@ -119,5 +100,5 @@ DELIVERABLES:
 
 ## Delivery Stage
 DELIVERABLES:
-- [Main_Notebook](xxxxxxx)
-- walk through of notebook
+- [Main_Notebook](https://github.com/RyvynYoung/Zillow_Clustering_Project/blob/main/Final.ipynb)
+- walk through of notebook 5min

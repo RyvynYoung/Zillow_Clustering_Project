@@ -17,6 +17,9 @@ import explore
 
 
 def linear_reg_train(x_scaleddf, target):
+    '''
+    runs linear regression algorithm
+    '''
     lm = LinearRegression()
     lm.fit(x_scaleddf, target)
     y_hat = lm.predict(x_scaleddf)
@@ -25,6 +28,9 @@ def linear_reg_train(x_scaleddf, target):
     return lm, y_hat, LM_MSE
 
 def get_baseline(y_train):
+    '''
+    gets baseline for y dataframe
+    '''
     # determine Baseline to beat
     rows_needed = y_train.shape[0]
     # create array of predictions of same size as y_train.logerror based on the mean
@@ -35,6 +41,9 @@ def get_baseline(y_train):
     return baseline, y_hat
 
 def lasso_lars(x_scaleddf, target):
+    '''
+    runs Lasso Lars algorithm
+    ''' 
     # Make a model
     lars = LassoLars(alpha=1)
     # Fit a model
@@ -46,6 +55,9 @@ def lasso_lars(x_scaleddf, target):
     return lars_rmse
 
 def polynomial(X_trainsdf, target):
+    '''
+    runs polynomial algorithm
+    ''' 
     # Make a model
     pf = PolynomialFeatures(degree=2)
     # note: tried increasing degree to 4 but took forever to run and would probably overfit, retest if time permits
@@ -64,6 +76,11 @@ def polynomial(X_trainsdf, target):
 
 
 def poly_val_test(X_train_scaled, X_validate_scaled, y_train, y_validate):
+    '''
+    runs polynomial algorithm for validate and test dataframes
+    needs to be fixed/evaluated, should be combined with above and above needs to return transformed
+    for later use
+    ''' 
     # Make a model
     pf = PolynomialFeatures(degree=2)
     X_train_squared = pf.fit_transform(X_train_scaled)
@@ -77,7 +94,6 @@ def poly_val_test(X_train_scaled, X_validate_scaled, y_train, y_validate):
     lm_pred_train = lm_squared.predict(X_train_squared)
     lm_pred_val = lm_squared.predict(X_validate_squared)
 
-
     # Compute root mean squared error
     lm_rmse_train = sqrt(mean_squared_error(y_train, lm_pred_train))
     lm_rmse_val = sqrt(mean_squared_error(y_validate, lm_pred_val))
@@ -87,6 +103,10 @@ def poly_val_test(X_train_scaled, X_validate_scaled, y_train, y_validate):
 
 
 def linear_reg_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
+    '''
+    runs linear regression algorithm on validate and test
+    but fits model on train
+    '''
     lm = LinearRegression()
     lm.fit(X_train_scaled, y_train)
 
@@ -96,6 +116,9 @@ def linear_reg_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
     return LM_RMSE, y_hat    
 
 def tweedie(X_train_scaled, y_train):
+    '''
+    runs tweedie algorithm
+    ''' 
     # Make Model
     tw = TweedieRegressor(power=0, alpha=.001) # 0 = normal distribution
     # Fit Model
@@ -107,8 +130,12 @@ def tweedie(X_train_scaled, y_train):
     return tw_rmse
 
 def tweedie_vt(X_train_scaled, X_validate_scaled, y_train, y_validate):
+    '''
+    runs tweedie algorithm on validate and test
+    but fits model on train
+    '''
     # Make Model
-    tw = TweedieRegressor(power=0, alpha=0.1) # 0 = normal distribution
+    tw = TweedieRegressor(power=0, alpha=0.001) # 0 = normal distribution
     # Fit Model
     tw.fit(X_train_scaled, y_train)
     # Make Predictions

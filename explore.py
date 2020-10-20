@@ -9,19 +9,27 @@ import summarize
 import prepare
 
 def summary(df):
-    # print summary info then remove generated columns
+    '''
+    print summary info then remove generated columns
+    '''
     df = summarize.df_summary(df)
     cols_to_remove3 = ['null_count', 'pct_null', ]
     df = prepare.remove_columns(df, cols_to_remove3)
     return df
 
 def plot_variable_pairs(df):
+    '''
+    visualizes pairs of variables
+    '''
     g = sns.PairGrid(df) 
     g.map_diag(sns.distplot)
     g.map_offdiag(sns.regplot)
 
 
 def plot_categorical_and_continuous_vars(categorical_var, continuous_var, df):
+    '''
+    visualize categorical and continuous variables
+    '''
     plt.rc('font', size=13)
     plt.rc('figure', figsize=(13, 7))
     sns.boxplot(data=df, y=continuous_var, x=categorical_var)
@@ -32,6 +40,9 @@ def plot_categorical_and_continuous_vars(categorical_var, continuous_var, df):
     plt.show()
 
 def pearson(continuous_var1, continuous_var2):
+    '''
+    runs pearson r test on 2 continuous variables
+    '''
     alpha = .05
     r, p = stats.pearsonr(continuous_var1, continuous_var2)
     # print('r=', r)
@@ -43,6 +54,9 @@ def pearson(continuous_var1, continuous_var2):
     return r, p
 
 def chi2test(categorical_var1, categorical_var2):
+    '''
+    runs chi squared test on 2 categorical variables
+    '''
     alpha = 0.05
     contingency_table = pd.crosstab(categorical_var1, categorical_var2)
 
@@ -56,7 +70,9 @@ def chi2test(categorical_var1, categorical_var2):
     return p
 
 def elbow_plot(X_train_scaled, cluster_vars):
-    # elbow method to identify good k for us, originally used range (2,20), changed for presentation
+    '''
+    elbow method to identify good k for us, originally used range (2,20), changed for presentation
+    '''
     ks = range(2,16)
     
     # empty list to hold inertia (sum of squares)
@@ -82,7 +98,9 @@ def elbow_plot(X_train_scaled, cluster_vars):
 
 
 def run_kmeans(X_train_scaled, X_train, cluster_vars, k, cluster_col_name):
-    # create kmeans object
+    '''
+    create kmeans object
+    '''
     kmeans = KMeans(n_clusters = k, random_state = 13)
     kmeans.fit(X_train_scaled[cluster_vars])
     # predict and create a dataframe with cluster per observation
@@ -96,6 +114,9 @@ def run_kmeans(X_train_scaled, X_train, cluster_vars, k, cluster_col_name):
 ####### train_clusters, kmeans = run_kmeans(X_train_scaled, X_train, k, cluster_vars, cluster_col_name)
 
 def kmeans_transform(X_scaled, kmeans, cluster_vars, cluster_col_name):
+    '''
+    creates clusters to add to validate and test tests
+    '''
     kmeans.transform(X_scaled[cluster_vars])
     trans_clusters = \
         pd.DataFrame(kmeans.predict(X_scaled[cluster_vars]),
@@ -108,6 +129,9 @@ def kmeans_transform(X_scaled, kmeans, cluster_vars, cluster_col_name):
 
 
 def get_centroids(kmeans, cluster_vars, cluster_col_name):
+    '''
+    get centroids to add to X dataframes
+    '''
     centroid_col_names = ['centroid_' + i for i in cluster_vars]
 
     centroids = pd.DataFrame(kmeans.cluster_centers_, 
@@ -119,7 +143,9 @@ def get_centroids(kmeans, cluster_vars, cluster_col_name):
 
 
 def add_to_train(X_train, train_clusters, X_train_scaled, centroids, cluster_col_name):
-    # concatenate cluster id
+    '''
+    concatenate cluster id with dataframes
+    '''
     X_train = pd.concat([X_train, train_clusters], axis=1)
 
     # join on clusterid to get centroids
