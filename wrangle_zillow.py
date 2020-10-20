@@ -114,6 +114,7 @@ def wrangle_zillow_cluster():
     '''
     # get data with acquire file
     df = acquire.get_zillow_cluster_data()
+    print('acquire data shape=', df.shape)
     
     # drop known duplicate columns and those with proportion of null values above threshold with prepare file
     df = prepare.data_prep(df, cols_to_remove=['id', 'id.1', 'pid', 'tdate'], prop_required_column=.5, prop_required_row=.5)
@@ -129,8 +130,8 @@ def wrangle_zillow_cluster():
 
     df['county'] = df.fips.apply(get_county_name)
 
-    # removing these columns
-    #df = prepare.get_counties(df)
+    # get dummies for counties
+    df = prepare.get_counties(df)
 
     # drop additional columns with nulls that are duplicate or have too many remaining nulls to use
     cols_to_remove2 = ['heatingorsystemtypeid', 'buildingqualitytypeid', 'finishedsquarefeet12', 'propertyzoningdesc', 'regionidcity', 
@@ -166,6 +167,7 @@ def wrangle_zillow_cluster():
 
     # drop remaining null vaules for MVP - lot size and land $ are biggest with 7663 each
     df = df.dropna()
+    print('prepare data shape=', df.shape)
     # df shape (62481, 27)
 
     # split dataset

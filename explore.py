@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import scipy.stats
+import scipy.stats as stats
 import os
 from sklearn.cluster import KMeans
 import summarize
@@ -31,7 +31,17 @@ def plot_categorical_and_continuous_vars(categorical_var, continuous_var, df):
     sns.swarmplot(data=df, y=continuous_var, x=categorical_var)
     plt.show()
 
-
+def pearson(continuous_var1, continuous_var2):
+    alpha = .05
+    r, p = stats.pearsonr(continuous_var1, continuous_var2)
+    print('r=', r)
+    print('p=', p)
+    if p < alpha:
+        print("We reject the null hypothesis")
+        print(f'p     = {p:.4f}')
+    else:
+        print("We fail to reject the null hypothesis")
+    return r, p
 
 def elbow_plot(X_train_scaled, cluster_vars):
     # elbow method to identify good k for us, originally used range (2,20), changed for presentation
