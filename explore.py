@@ -166,3 +166,9 @@ def add_to_train(X_train, train_clusters, X_train_scaled, centroids, cluster_col
 
 ####### X_train, X_train_scaled = add_to_train(X_train, train_clusters, X_train_scaled, centroids, cluster_col_name)
 
+def get_cluster_dummies(df_scaled, cluster_name):
+    # create dummy vars of cluster name column
+    cluster_df = pd.get_dummies(df_scaled[cluster_name])
+    # concatenate the dataframe with the cluster columns to the original dataframe
+    df_dummies = pd.concat([df_scaled, cluster_df], axis = 1)
+    return df_dummies

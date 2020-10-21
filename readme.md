@@ -25,15 +25,21 @@ User will need env.py file with access to Codeup database
 
 ## Key Findings
 
-1. **Top 5 drivers of logerror (RMSE)**
-- xxxxxx
+**Zestimate Error Drivers**
+- Confirmed driver = county based on statistical testing and recursive modeling
+- Some additional expected drivers based on statistical testing: 
+    - tax dollar count, structure dollar per sqft, bedroom count, finished sqft, tax rate, 
+    - but these do not necessarily score as key features when using RFE to evaluate
 
-2. **Top Model = xxxxxx**
-- 
-  
+**Best Performing Model**
+- The best model was a Linear Regression using all features (excludes cluster names)
+    - result is 3.6% worse than baseline
 
-###### Next Steps    
-
+**Possible Next Steps**
+- obtain additional data on school rating and distance from beach
+- reassess clusters and adjust
+- reduce focus to one county
+- additional feature engineering and model types
 
 
 ## Project Organization
@@ -43,6 +49,7 @@ Zillow Culstering Project [repo](XXXXXXXX)
 │
 ├── acquire.py              <- The script to download or generate data
 ├── prepare.py              <- The script for preparing the raw data
+├── summarize.py            <- The script for summarizing the raw data
 ├── wrangle_zillow.py       <- The script for running the acquire and prepare functions
 │                              then splitting and scaling the data
 ├── explore.py              <- The script to produce visualizations for the notebook
@@ -51,7 +58,7 @@ Zillow Culstering Project [repo](XXXXXXXX)
 │
 ├── mvp.ipynb               <- The draft notebook for the project
 │
-├── final.ipynb             <- The finished notebook for presentation of the project
+├── Final.ipynb             <- The finished notebook for presentation of the project
 ```
 
 ## Data Dictionary
