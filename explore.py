@@ -167,8 +167,37 @@ def add_to_train(X_train, train_clusters, X_train_scaled, centroids, cluster_col
 ####### X_train, X_train_scaled = add_to_train(X_train, train_clusters, X_train_scaled, centroids, cluster_col_name)
 
 def get_cluster_dummies(df_scaled, cluster_name):
+    '''
+    get dummies for the cluster name column and add those to the dataframe
+    would like this to rename columns added as well, not able to make that work yet
+    '''
     # create dummy vars of cluster name column
     cluster_df = pd.get_dummies(df_scaled[cluster_name])
     # concatenate the dataframe with the cluster columns to the original dataframe
     df_dummies = pd.concat([df_scaled, cluster_df], axis = 1)
     return df_dummies
+
+def indep_target_vis(df_exp, columns_list):
+    '''create loop to make plots of features with target'''
+    for col in columns_list:
+        plt.figure(figsize=(13, 7))
+        sns.scatterplot(data=df_exp, x=col, y='logerror', hue='county')
+        plt.title(f'Visualization of {col} with logerror by county')
+    # # change x axis label to more descriptive name
+    # # unable to get this working
+    # xname = ['bedroom count', 'calculated finished sqft', 'full bath count', 'lot size sqft', 'room count', 
+    #          'unit count', 'structure tax value dollars', 'tax value dollars', 'tax amount', 'LA county', 
+    #          'Orange county', 'Ventura county', 'age of property', 'tax rate percentage', 
+    #          'structure value dollars per sqft', 'land value dollars per sqft', 'bedroom/bathroom ratio']
+
+    # # error I'm getting = "ValueError: too many values to unpack (expected 2)"
+
+    # for col, n in columns, xname:
+    #     plt.figure(figsize=(13, 7))
+    #     sns.scatterplot(data=X_train_exp, x=col, y='logerror', hue='county')
+    #     plt.title(f'Visualization of {col} with logerror by county')
+    #     plt.xlabel(n)
+
+
+
+    
